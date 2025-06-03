@@ -195,16 +195,20 @@ public:
     void PrintRow(int row) {
         cout << "{";
         for (int j = 0; j < n; j++) {
-            if (j > 0) cout << ",";
+            if (j > 0) {
+                cout << ",";
+            }
             cout << setw(3) << board[row][j];
         }
         cout << "}" << endl;
     }
 };
 
-// Valida la entrada del usuario
+// Valida la entrada del usuario  
 bool isValidInput(int n) {
-    return (n == 4) || (n == 8);
+    bool isValid4 = (n == 4);
+    bool isValid8 = (n == 8);
+    return isValid4 || isValid8;
 }
 
 // Función principal
