@@ -203,8 +203,8 @@ public:
 };
 
 // Valida la entrada del usuario
-bool IsValidInput(int n) {
-    return n == 4 || n == 8;
+bool isValidInput(int n) {
+    return (n == 4) || (n == 8);
 }
 
 // Función principal
@@ -212,7 +212,7 @@ int main() {
     int n;
     cin >> n;
     
-    if (!IsValidInput(n)) {
+    if (!isValidInput(n)) {
         cout << "Error: N debe ser 4 u 8" << endl;
         return 1;
     }
