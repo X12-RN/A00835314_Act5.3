@@ -1,7 +1,9 @@
-// A0XXXXXXX - A0YYYYYYY
-// Actividad 5.3 Implementación backtracking con poda pesada
-// Fecha: 2024-06-03
-// Copyright (c) 2024 por A0XXXXXXX y A0YYYYYYY
+/* 
+A0XXXXXXX - A0YYYYYYY
+Actividad 5.3 Implementación backtracking con poda pesada
+Fecha: 2024-06-03
+Copyright (c) 2024 por A0XXXXXXX y A0YYYYYYY
+*/
 
 #include <iostream>
 #include <vector>
