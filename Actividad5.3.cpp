@@ -21,44 +21,44 @@ public:
     }
     
     // Verifica si es seguro colocar una reina en (row, col)
-    bool isSafe(int row, int col) {
+    bool IsSafe(int row, int col) {
         return !cols[col] && !diag1[row - col + n - 1] && !diag2[row + col];
     }
     
     // Calcula el grado de una posición específica (cuántas posiciones ataca)
-    int calculateDegrees(int row, int col) {
+    int CalculateDegrees(int row, int col) {
         int degree = 0;
         
         // Contar en fila y columna
         degree += (n - 1) * 2;
         
         // Contar en diagonales
-        degree += countDiagonalPositions(row, col, 1, 1);   // Diagonal principal
-        degree += countDiagonalPositions(row, col, 1, -1);  // Diagonal secundaria
+        degree += CountDiagonalPositions(row, col, 1, 1);   // Diagonal principal
+        degree += CountDiagonalPositions(row, col, 1, -1);  // Diagonal secundaria
         
         return degree;
     }
     
     // Cuenta posiciones en una dirección diagonal específica
-    int countDiagonalPositions(int row, int col, int deltaRow, int deltaCol) {
+    int CountDiagonalPositions(int row, int col, int deltaRow, int deltaCol) {
         int count = 0;
         
         // Contar hacia adelante
-        count += countInDirection(row, col, deltaRow, deltaCol);
+        count += CountInDirection(row, col, deltaRow, deltaCol);
         
         // Contar hacia atrás
-        count += countInDirection(row, col, -deltaRow, -deltaCol);
+        count += CountInDirection(row, col, -deltaRow, -deltaCol);
         
         return count;
     }
     
     // Cuenta posiciones válidas en una dirección específica
-    int countInDirection(int row, int col, int deltaRow, int deltaCol) {
+    int CountInDirection(int row, int col, int deltaRow, int deltaCol) {
         int count = 0;
         int r = row + deltaRow;
         int c = col + deltaCol;
         
-        while (isValidPosition(r, c)) {
+        while (IsValidPosition(r, c)) {
             count++;
             r += deltaRow;
             c += deltaCol;
@@ -68,17 +68,17 @@ public:
     }
     
     // Verifica si una posición está dentro del tablero
-    bool isValidPosition(int row, int col) {
+    bool IsValidPosition(int row, int col) {
         return row >= 0 && row < n && col >= 0 && col < n;
     }
     
     // Obtiene las posiciones válidas para una fila ordenadas por grado
-    vector<int> getValidPositions(int row) {
+    vector<int> GetValidPositions(int row) {
         vector<pair<int, int>> validCols;
         
         for (int col = 0; col < n; col++) {
-            if (isSafe(row, col)) {
-                int degree = calculateDegrees(row, col);
+            if (IsSafe(row, col)) {
+                int degree = CalculateDegrees(row, col);
                 validCols.push_back({degree, col});
             }
         }
@@ -86,11 +86,11 @@ public:
         // Ordenar por grado descendente (poda pesada)
         sort(validCols.begin(), validCols.end(), greater<pair<int,int>>());
         
-        return extractColumns(validCols);
+        return ExtractColumns(validCols);
     }
     
     // Extrae solo las columnas del vector de pares
-    vector<int> extractColumns(const vector<pair<int, int>>& validCols) {
+    vector<int> ExtractColumns(const vector<pair<int, int>>& validCols) {
         vector<int> result;
         for (const auto& p : validCols) {
             result.push_back(p.second);
@@ -99,19 +99,19 @@ public:
     }
     
     // Cuenta posiciones válidas restantes
-    int countValidPositions(int startRow) {
+    int CountValidPositions(int startRow) {
         int count = 0;
         for (int i = startRow; i < n; i++) {
-            count += countValidInRow(i);
+            count += CountValidInRow(i);
         }
         return count;
     }
     
     // Cuenta posiciones válidas en una fila específica
-    int countValidInRow(int row) {
+    int CountValidInRow(int row) {
         int count = 0;
         for (int j = 0; j < n; j++) {
-            if (isSafe(row, j)) {
+            if (IsSafe(row, j)) {
                 count++;
             }
         }
@@ -119,7 +119,7 @@ public:
     }
     
     // Coloca una reina en el tablero
-    void placeQueen(int row, int col) {
+    void PlaceQueen(int row, int col) {
         board[row][col] = 1;
         cols[col] = true;
         diag1[row - col + n - 1] = true;
@@ -127,7 +127,7 @@ public:
     }
     
     // Quita una reina del tablero
-    void removeQueen(int row, int col) {
+    void RemoveQueen(int row, int col) {
         board[row][col] = 0;
         cols[col] = false;
         diag1[row - col + n - 1] = false;
@@ -135,64 +135,64 @@ public:
     }
     
     // Verifica si hay suficientes posiciones para continuar
-    bool hasSufficientPositions(int row) {
-        return countValidPositions(row) >= (n - row);
+    bool HasSufficientPositions(int row) {
+        return CountValidPositions(row) >= (n - row);
     }
     
     // Función principal de backtracking
-    bool solveNQueens(int row) {
+    bool SolveNQueens(int row) {
         if (row == n) {
             return true; // Todas las reinas colocadas
         }
         
-        if (!hasSufficientPositions(row)) {
+        if (!HasSufficientPositions(row)) {
             return false; // Poda: no hay suficientes posiciones
         }
         
-        vector<int> validCols = getValidPositions(row);
+        vector<int> validCols = GetValidPositions(row);
         
-        return tryAllPositions(row, validCols);
+        return TryAllPositions(row, validCols);
     }
     
     // Intenta todas las posiciones válidas en una fila
-    bool tryAllPositions(int row, const vector<int>& validCols) {
+    bool TryAllPositions(int row, const vector<int>& validCols) {
         for (int col : validCols) {
-            placeQueen(row, col);
+            PlaceQueen(row, col);
             
-            if (solveNQueens(row + 1)) {
+            if (SolveNQueens(row + 1)) {
                 return true;
             }
             
-            removeQueen(row, col);
+            RemoveQueen(row, col);
         }
         return false;
     }
     
     // Resuelve el problema y muestra la solución
-    bool solve() {
-        if (solveNQueens(0)) {
-            printSolution();
+    bool Solve() {
+        if (SolveNQueens(0)) {
+            PrintSolution();
             return true;
         }
         
-        printNoSolution();
+        PrintNoSolution();
         return false;
     }
     
     // Imprime mensaje cuando no hay solución
-    void printNoSolution() {
+    void PrintNoSolution() {
         cout << "No existe solución para N = " << n << endl;
     }
     
     // Imprime la solución en el formato requerido
-    void printSolution() {
+    void PrintSolution() {
         for (int i = 0; i < n; i++) {
-            printRow(i);
+            PrintRow(i);
         }
     }
     
     // Imprime una fila de la solución
-    void printRow(int row) {
+    void PrintRow(int row) {
         cout << "{";
         for (int j = 0; j < n; j++) {
             if (j > 0) cout << ",";
@@ -203,7 +203,7 @@ public:
 };
 
 // Valida la entrada del usuario
-bool isValidInput(int n) {
+bool IsValidInput(int n) {
     return n == 4 || n == 8;
 }
 
@@ -212,13 +212,13 @@ int main() {
     int n;
     cin >> n;
     
-    if (!isValidInput(n)) {
+    if (!IsValidInput(n)) {
         cout << "Error: N debe ser 4 u 8" << endl;
         return 1;
     }
     
     NQueens nqueens(n);
-    nqueens.solve();
+    nqueens.Solve();
     
     return 0;
 }
